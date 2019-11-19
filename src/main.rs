@@ -1,6 +1,10 @@
 #![deny(warnings)]
 extern crate hyper;
 
+mod subscribe;
+mod start;
+mod check;
+
 use hyper::{Body, Request, Response, Server};
 use hyper::service::service_fn_ok;
 use hyper::rt::{self, Future};
@@ -10,12 +14,21 @@ fn main() {
 
     let server = Server::bind(&addr)
         .serve(|| {
-            // This is the `Service` that will handle the connection.
-            // `service_fn_ok` is a helper to convert a function that
-            // returns a Response into a `Service`.
             service_fn_ok(move |req: Request<Body>| {
+
                 println!("Request is {} {}", req.method(), req.uri().path());
-                Response::new(Body::from("Hello World!"))
+
+                if req.uri().path() == "/subscribe" {
+                    return subscribe::handle(req);
+                }
+                else if req.uri().path() == "/start" {
+                    return start::handle(req);
+                }
+                else if req.uri().path() == "/check" {
+                    return check::handle(req);
+                }
+
+                Response::new(Body::from("404"))
             })
         })
         .map_err(|e| eprintln!("server error: {}", e));
