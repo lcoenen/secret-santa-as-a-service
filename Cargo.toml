@@ -8,3 +8,8 @@ edition = "2018"
 
 [dependencies]
 hyper = "0.12"
+serde = { version = "1.0.104", features = ["derive"] }
+toml = "0.5.5"
+
+[dependencies.redis]
+version = "*"
