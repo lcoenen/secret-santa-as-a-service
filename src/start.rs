@@ -30,28 +30,31 @@ struct User {
 pub fn handle(_req: Request<Body>) -> Response<Body> {
     thread::spawn(|| {
 
-        println!("Spawning");
         let mut rng = rand::thread_rng();
 
         let client = redis::Client::open("redis://127.0.0.1/").unwrap();
         let mut con = client.get_connection().unwrap();
 
         let users: Vec<String> = con.hkeys("users").unwrap();
-        println!("recieved keys"); 
+        
         let mut partners = users.clone();
-
         partners.shuffle(&mut rng);
-        println!("shuffled"); 
+
+        println!("users: {:?}", users);
+        println!("partners: {:?}", partners);
+
         let mut pipeline = redis::pipe();
         pipeline.atomic();
-        let zipped_iter = users.into_iter().zip(partners.into_iter());
-        for (key, partner) in zipped_iter {
-            pipeline.hset("patners", key, partner).ignore();
+
+        let len = users.len();
+
+        for i in 0..len {
+            let key = &partners[i];
+            let partner = &partners[if i != len - 1 { i + 1 } else { 0 }];
+            pipeline.hset("partners", key, partner).ignore();
         }
 
-        println!("querying"); 
         let _: () = pipeline.query(&mut con).unwrap(); 
-        println!("queried"); 
 
     });
 
