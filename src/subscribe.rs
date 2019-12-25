@@ -45,7 +45,7 @@ pub fn handle(_req: Request<Body>) -> Response<Body> {
 
         let user_string = to_string(&user).unwrap();
 
-        let _ : () = con.lpush("users", user_string).unwrap();
+        let _ : () = con.hset("users", user.username, user_string).unwrap();
     });
 
     Response::new(Body::from("Subscribed"))

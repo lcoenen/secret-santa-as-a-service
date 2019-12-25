@@ -10,6 +10,7 @@ edition = "2018"
 hyper = "0.12"
 serde = { version = "1.0.104", features = ["derive"] }
 toml = "0.5.5"
+rand = "0.7.2"
 
 [dependencies.redis]
 version = "*"

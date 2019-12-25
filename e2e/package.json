@@ -1,0 +1,15 @@
+{
+  "name": "ssaas-e2e",
+  "version": "1.0.0",
+  "description": "E2e test for ssaas",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest "
+  },
+  "author": "Loic Coenen",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "toml": "^3.0.0"
+  }
+}
