@@ -4,6 +4,7 @@ extern crate hyper;
 mod subscribe;
 mod start;
 mod check;
+mod interface;
 
 use hyper::{Body, Request, Response, Server};
 use hyper::service::service_fn_ok;

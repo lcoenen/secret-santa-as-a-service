@@ -32,9 +32,25 @@ describe('happy paths', () => {
 					.then(res => res.text())
 					.then(response => expect(response).toBe('Subscribed')),
 			),
-		).then(() =>
-			fetch(`${HOST}/start`)
-				.then(res => res.text())
-				.then(response => expect(response).toBe('Started')),
-		));
+		)
+			.then(() =>
+				fetch(`${HOST}/start`)
+					.then(res => res.text())
+					.then(response => expect(response).toBe('Started')),
+			)
+			.then(() =>
+				Promise.all(
+					users.map(user =>
+						fetch(`${HOST}/check`)
+							.then(res => res.text())
+							.then(response => toml.parse(response))
+							.then(({ partner }) => {
+								expect(
+									users.map(toml.parse).map(user => user.usename),
+								).toContain(partner);
+								expect(partner).not.toBe(toml.parse(user).username);
+							}),
+					),
+				),
+			));
 });

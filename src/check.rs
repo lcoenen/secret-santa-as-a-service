@@ -1,4 +1,3 @@
-
 extern crate hyper;
 
 use hyper::{Body, Request, Response};
@@ -12,16 +11,6 @@ use hyper::{Body, Request, Response};
 extern crate redis;
 // use redis::Commands;
 // use toml::ser::to_string;
-
-// // TODO Dry dis
-// #[derive(Serialize, Deserialize, Debug)]
-// struct User {
-//     username: String,
-//     password: String,
-//     // TODO: optional
-//     email: String,
-//     giveTo: String
-// }
 
 // fn data(_req: Request<Body>) -> String {
 //     let (_parts, body) = _req.into_parts();
