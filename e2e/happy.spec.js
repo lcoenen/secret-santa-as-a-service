@@ -41,7 +41,10 @@ describe('happy paths', () => {
 			.then(() =>
 				Promise.all(
 					users.map(user =>
-						fetch(`${HOST}/check`)
+						fetch(`${HOST}/check`, {
+							method: 'POST',
+							body: user,
+						})
 							.then(res => res.text())
 							.then(response => toml.parse(response))
 							.then(({ partner }) => {

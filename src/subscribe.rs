@@ -1,4 +1,5 @@
 extern crate hyper;
+extern crate redis;
 
 use hyper::{Body, Request, Response};
 use crate::hyper::rt::Stream;
@@ -6,18 +7,10 @@ use std::str;
 use crate::hyper::rt::Future;
 use std::thread;
 
-use serde::{Serialize, Deserialize};
-
-extern crate redis;
 use redis::Commands;
 use toml::ser::to_string;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct User {
-    username: String,
-    password: String,
-    email: String
-}
+use crate::interface::User;
 
 fn data(_req: Request<Body>) -> String {
     let (_parts, body) = _req.into_parts();
