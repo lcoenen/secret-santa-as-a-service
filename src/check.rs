@@ -11,6 +11,7 @@ use serde::{Serialize, Deserialize};
 extern crate redis;
 use redis::Commands;
 // use toml::ser::to_string;
+use std::sync::mpsc;
 
 use crate::interface::User;
 
@@ -32,7 +33,8 @@ struct CheckResult {
 }
 
 pub fn handle(_req: Request<Body>) -> Response<Body> {
-    let handle = thread::spawn(|| {
+    let (tx, rx) = mpsc::channel();
+    thread::spawn(move || {
 
         let client = redis::Client::open("redis://127.0.0.1/").unwrap();
         let mut con = client.get_connection().unwrap();
@@ -46,8 +48,10 @@ pub fn handle(_req: Request<Body>) -> Response<Body> {
             partner: found_string
         };
 
-        toml::to_string(&result).unwrap()
+        tx.send(toml::to_string(&result).unwrap()).unwrap();
     });
 
-    Response::new(Body::from(handle.join().unwrap()))
+    let response = rx.recv().unwrap();
+
+    Response::new(Body::from(response))
 }
