@@ -18,7 +18,11 @@ use crate::interface::User;
 fn data(_req: Request<Body>) -> String {
         
     let (_parts, body) = _req.into_parts();
+    // Blocks there
+    println!("foo");
     let chunks = body.collect().wait().unwrap(); 
+    println!("bar");
+
     let strings: Vec<String> = chunks.into_iter().map(|chunk| {
         let buf: Vec<u8> = chunk.into_bytes().into_iter().collect();
         String::from(str::from_utf8(&buf).unwrap())
